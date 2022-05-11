@@ -4,7 +4,7 @@ import { ApplicationModal } from '../../state/application/actions'
 import {
   useModalOpen,
   useNetworkSwitcherPopoverToggle,
-  useWalletSwitcherPopoverToggle
+  useWalletSwitcherPopoverToggle,
 } from '../../state/application/hooks'
 import { ButtonPrimary } from '../Button'
 
@@ -19,6 +19,7 @@ export const ButtonConnect = () => {
     <ButtonPrimary
       onClick={isSwitchNetwork ? toggleNetworkSwitcherPopover : toggleWalletSwitcherPopover}
       disabled={networkSwitcherPopoverOpen}
+      data-testid="switch-connect-button"
     >
       {isSwitchNetwork ? 'Switch network' : 'Connect wallet'}
     </ButtonPrimary>

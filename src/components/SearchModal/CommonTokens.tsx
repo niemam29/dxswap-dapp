@@ -32,7 +32,7 @@ const BaseWrapper = styled.div<{ disable?: boolean }>`
 export default function CommonTokens({
   chainId,
   onSelect,
-  selectedCurrency
+  selectedCurrency,
 }: {
   chainId?: ChainId
   selectedCurrency?: Currency | null
@@ -41,7 +41,7 @@ export default function CommonTokens({
   const nativeCurrency = useNativeCurrency()
 
   return (
-    <AutoColumn gap="15px">
+    <AutoColumn gap="15px" data-testid="common-tokens">
       <AutoRow>
         <TYPE.body fontWeight={500} fontSize="11px" lineHeight="13px" letterSpacing="0.06em">
           COMMON TOKENS

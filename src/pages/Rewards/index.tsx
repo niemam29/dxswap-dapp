@@ -66,8 +66,8 @@ const ButtonRow = styled(RowFixed)`
 
 export default function Rewards({
   match: {
-    params: { currencyIdA, currencyIdB }
-  }
+    params: { currencyIdA, currencyIdB },
+  },
 }: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
   const router = useRouter()
   const token0 = useToken(currencyIdA)
@@ -103,7 +103,7 @@ export default function Rewards({
   const handlePairSelect = useCallback(
     pair => {
       router.push({
-        pathname: `/rewards/${pair.token0.address}/${pair.token1.address}`
+        pathname: `/rewards/${pair.token0.address}/${pair.token1.address}`,
       })
       setFilterPair(pair)
     },
@@ -113,7 +113,7 @@ export default function Rewards({
     e => {
       setAggregatedDataFilter(PairsFilterType.ALL)
       router.push({
-        pathname: `/rewards`
+        pathname: `/rewards`,
       })
       setFilterPair(null)
       e.stopPropagation()
@@ -168,7 +168,7 @@ export default function Rewards({
                     </Box>
                   )}
                   <Box mr="4px">
-                    <Text fontWeight="600" fontSize="16px" lineHeight="20px">
+                    <Text fontWeight="600" fontSize="16px" lineHeight="20px" data-testid="all-pairs">
                       {filterPair
                         ? `${unwrappedToken(filterPair.token0)?.symbol}/${unwrappedToken(filterPair.token1)?.symbol}`
                         : wrappedPair[0] === PairState.LOADING
@@ -196,7 +196,12 @@ export default function Rewards({
               </Flex>
               <ButtonRow>
                 {liquidityMiningEnabled && (
-                  <ResponsiveButtonSecondary as={Link} padding="8px 14px" to="/liquidity-mining/create">
+                  <ResponsiveButtonSecondary
+                    as={Link}
+                    padding="8px 14px"
+                    to="/liquidity-mining/create"
+                    data-testid="create-campaign"
+                  >
                     <Text fontWeight={700} fontSize={12} lineHeight="15px">
                       CREATE CAMPAIGN
                     </Text>

@@ -33,9 +33,9 @@ export function listToTokenMap(list: TokenList | null): TokenAddressMap {
         ...tokenMap[token.chainId],
         [token.address]: {
           token,
-          list
-        }
-      }
+          list,
+        },
+      },
     }
   }, {})
   listCache?.set(list, map)
@@ -51,8 +51,9 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     [ChainId.MAINNET]: { ...map1[ChainId.MAINNET], ...map2[ChainId.MAINNET] },
     [ChainId.RINKEBY]: { ...map1[ChainId.RINKEBY], ...map2[ChainId.RINKEBY] },
     [ChainId.XDAI]: { ...map1[ChainId.XDAI], ...map2[ChainId.XDAI] },
+    [ChainId.POLYGON]: { ...map1[ChainId.POLYGON], ...map2[ChainId.POLYGON] },
     [ChainId.ARBITRUM_ONE]: { ...map1[ChainId.ARBITRUM_ONE], ...map2[ChainId.ARBITRUM_ONE] },
-    [ChainId.ARBITRUM_RINKEBY]: { ...map1[ChainId.ARBITRUM_RINKEBY], ...map2[ChainId.ARBITRUM_RINKEBY] }
+    [ChainId.ARBITRUM_RINKEBY]: { ...map1[ChainId.ARBITRUM_RINKEBY], ...map2[ChainId.ARBITRUM_RINKEBY] },
   }
 }
 
@@ -133,7 +134,7 @@ export function useUnsupportedTokenList(): TokenAddressMap {
   // format into one token address map
   return useMemo(() => combineMaps(localUnsupportedListMap, loadedUnsupportedListMap), [
     localUnsupportedListMap,
-    loadedUnsupportedListMap
+    loadedUnsupportedListMap,
   ])
 }
 

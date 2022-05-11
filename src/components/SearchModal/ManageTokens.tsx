@@ -41,7 +41,7 @@ const TrashIcon = styled(Trash)`
 
 export default function ManageTokens({
   setModalView,
-  setImportToken
+  setImportToken,
 }: {
   setModalView: (view: CurrencyModalView) => void
   setImportToken: (token: Token) => void
@@ -113,9 +113,17 @@ export default function ManageTokens({
                 onChange={handleInput}
               />
             </Row>
-            {searchQuery !== '' && !isAddressSearch && <TYPE.error error={true}>Enter valid token address</TYPE.error>}
+            {searchQuery !== '' && !isAddressSearch && (
+              <TYPE.error data-testid="token-manager-error-message" error={true}>
+                Enter valid token address
+              </TYPE.error>
+            )}
             {searchToken && (
-              <Card backgroundColor={theme.bg2} padding="10px 0">
+              <Card
+                backgroundColor={theme.bg2}
+                padding="10px 0"
+                data-testid={searchToken.symbol?.toLowerCase() + '-token-row'}
+              >
                 <ImportRow
                   token={searchToken}
                   showImportView={() => setModalView(CurrencyModalView.IMPORT_TOKEN)}

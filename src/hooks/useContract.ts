@@ -4,22 +4,23 @@ import {
   Token,
   Currency,
   WETH,
-  MULTICALL_ABI,
-  MULTICALL_ADDRESS,
+  MULTICALL2_ABI,
+  MULTICALL2_ADDRESS,
   WXDAI,
   STAKING_REWARDS_FACTORY_ADDRESS,
   STAKING_REWARDS_FACTORY_ABI,
   STAKING_REWARDS_DISTRIBUTION_ABI,
   SWPR_CLAIMER_ABI,
   SWPR_CLAIMER_ADDRESS,
-  SWPR_CONVERTER_ADDRESS
+  SWPR_CONVERTER_ADDRESS,
+  WMATIC,
 } from '@swapr/sdk'
 import SWPR_CONVERTER_ABI from '../constants/abis/swpr-converter.json'
 import { abi as IDXswapPairABI } from '@swapr/core/build/IDXswapPair.json'
 import { useMemo } from 'react'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
-  ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
+  ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
 } from '../constants/abis/argent-wallet-detector'
 import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'
 import ENS_ABI from '../constants/abis/ens-registrar.json'
@@ -27,6 +28,7 @@ import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
 import ERC20_ABI from '../constants/abis/erc20.json'
 import WETH_ABI from '../constants/abis/weth.json'
 import WXDAI_ABI from '../constants/abis/wxdai.json'
+import WMATIC_ABI from '../constants/abis/wmatic.json'
 import { getContract, getProviderOrSigner, isAddress } from '../utils'
 import { useActiveWeb3React } from './index'
 import { useNativeCurrency } from './useNativeCurrency'
@@ -66,6 +68,8 @@ function useWrappingTokenAbi(token?: Token): any | undefined {
       return WETH_ABI
     case WXDAI[chainId]:
       return WXDAI_ABI
+    case WMATIC[chainId]:
+      return WMATIC_ABI
     default:
       return undefined
   }
@@ -115,7 +119,7 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 
 export function useMulticallContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MULTICALL_ADDRESS[chainId], MULTICALL_ABI, false)
+  return useContract(chainId && MULTICALL2_ADDRESS[chainId], MULTICALL2_ABI, false)
 }
 
 export function useStakingRewardsDistributionFactoryContract(withSignerIfPossible?: boolean): Contract | null {

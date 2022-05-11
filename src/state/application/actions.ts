@@ -20,7 +20,6 @@ export type PopupContent =
     }
 
 export enum ApplicationModal {
-  WALLET,
   SETTINGS,
   SELF_CLAIM,
   ADDRESS_CLAIM,
@@ -32,13 +31,14 @@ export enum ApplicationModal {
   ETHEREUM_OPTION,
   NETWORK_SWITCHER_FROM,
   NETWORK_SWITCHER_TO,
-  UNSUPPORTED_NETWORK
+  UNSUPPORTED_NETWORK,
+  SIMPLE_SETTINGS,
 }
 
 export enum MainnetGasPrice {
   INSTANT = 'INSTANT',
   FAST = 'FAST',
-  NORMAL = 'NORMAL'
+  NORMAL = 'NORMAL',
 }
 
 export const updateBlockNumber = createAction<{ chainId: number; blockNumber: number }>('application/updateBlockNumber')

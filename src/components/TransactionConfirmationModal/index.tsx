@@ -4,7 +4,7 @@ import styled, { ThemeContext } from 'styled-components'
 import Modal from '../Modal'
 import { ExternalLink, TYPE } from '../../theme'
 import { Text } from 'rebass'
-import { CloseIcon, CustomLightSpinner } from '../../theme/components'
+import { CloseIcon, CustomLightSpinner } from '../../theme'
 import { RowBetween } from '../Row'
 import { AlertTriangle, ArrowUpCircle } from 'react-feather'
 import { ButtonPrimary } from '../Button'
@@ -65,7 +65,7 @@ export function ConfirmationPendingContent({ onDismiss, pendingText }: { onDismi
 function TransactionSubmittedContent({
   onDismiss,
   chainId,
-  hash
+  hash,
 }: {
   onDismiss: () => void
   hash: string | undefined
@@ -94,7 +94,7 @@ function TransactionSubmittedContent({
               </Text>
             </ExternalLink>
           )}
-          <ButtonPrimary onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
+          <ButtonPrimary onClick={onDismiss} style={{ margin: '20px 0 0 0' }} data-testid="close-modal-button">
             <Text fontWeight={600} fontSize="13px">
               Close
             </Text>
@@ -109,7 +109,7 @@ export function ConfirmationModalContent({
   title,
   bottomContent,
   onDismiss,
-  topContent
+  topContent,
 }: {
   title: string
   onDismiss: () => void
@@ -168,7 +168,7 @@ export default function TransactionConfirmationModal({
   attemptingTxn,
   hash,
   pendingText,
-  content
+  content,
 }: ConfirmationModalProps) {
   const { chainId } = useActiveWeb3React()
 

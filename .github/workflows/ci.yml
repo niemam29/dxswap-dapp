@@ -17,6 +17,7 @@ jobs:
         node_version: [16]
 
     steps:
+
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
@@ -25,6 +26,8 @@ jobs:
         run: yarn install
       - name: Lint
         run: yarn lint
+      - name: Check types
+        run: yarn tsc --noEmit
       - name: Test
         run: yarn test
       - name: Build

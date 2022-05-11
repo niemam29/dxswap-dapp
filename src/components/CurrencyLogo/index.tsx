@@ -7,6 +7,7 @@ import EtherLogo from '../../assets/images/ether-logo.png'
 import XDAILogo from '../../assets/images/xdai-logo.png'
 import DXDLogo from '../../assets/svg/dxd.svg'
 import SWPRLogo from '../../assets/images/swpr-logo.png'
+import PolygonMaticLogo from '../../assets/images/polygon-matic-logo.svg'
 import carrotListLogoUrl from '../../assets/images/carrot.png'
 import { useActiveWeb3React } from '../../hooks'
 import useHttpLocations from '../../hooks/useHttpLocations'
@@ -56,7 +57,8 @@ const NATIVE_CURRENCY_LOGO: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM_RINKEBY]: EtherLogo,
   [ChainId.MAINNET]: EtherLogo,
   [ChainId.RINKEBY]: EtherLogo,
-  [ChainId.XDAI]: XDAILogo
+  [ChainId.XDAI]: XDAILogo,
+  [ChainId.POLYGON]: PolygonMaticLogo,
 }
 
 export default function CurrencyLogo({
@@ -66,7 +68,7 @@ export default function CurrencyLogo({
   className,
   loading,
   marginRight = 0,
-  marginLeft = 0
+  marginLeft = 0,
 }: {
   currency?: Currency
   size?: string
@@ -95,7 +97,7 @@ export default function CurrencyLogo({
       return [
         `${window.location.origin}${
           carrotListLogoUrl.startsWith('.') ? carrotListLogoUrl.substring(1) : carrotListLogoUrl
-        }`
+        }`,
       ]
     return []
   }, [chainId, currency, nativeCurrencyLogo, uriLocations])

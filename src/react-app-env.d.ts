@@ -19,7 +19,7 @@ interface Window {
     request?: (args: EthereumProviderRequestArguments) => Promise<unknown>
     isCoinbaseWallet?: boolean
   }
-  web3?: {}
+  web3?: Record<string, unknown>
 }
 
 declare module 'content-hash' {
@@ -31,3 +31,5 @@ declare module 'multihashes' {
   declare function decode(buff: Uint8Array): { code: number; name: string; length: number; digest: Uint8Array }
   declare function toB58String(hash: Uint8Array): string
 }
+
+declare module 'toformat'

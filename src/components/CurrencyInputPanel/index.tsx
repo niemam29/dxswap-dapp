@@ -9,10 +9,12 @@ import { RowBetween } from '../Row'
 import { TYPE } from '../../theme'
 import NumericalInput from '../Input/NumericalInput'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
+import { breakpoints } from '../../utils/theme'
 
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import { FiatValueDetails } from '../FiatValueDetails'
+import { limitNumberOfDecimalPlaces } from '../../utils/prices'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -76,9 +78,10 @@ const Container = styled.div<{ focused: boolean }>`
   border-radius: 12px;
   transition: border 0.3s ease;
   padding: 18px 22px;
+  @media screen and (max-width: ${breakpoints.md}) {
+    padding: 18px 16px;
+  }
 `
-
-const Content = styled.div``
 
 const StyledTokenName = styled.span<{ active?: boolean }>`
   margin: ${({ active }) => (active ? '0 0 0 6px' : '0')};
@@ -90,8 +93,6 @@ const StyledTokenName = styled.span<{ active?: boolean }>`
 const UppercaseHelper = styled.span`
   text-transform: uppercase;
 `
-
-const FiatRow = styled.div``
 
 interface CurrencyInputPanelProps {
   value: string
@@ -112,6 +113,7 @@ interface CurrencyInputPanelProps {
   balance?: CurrencyAmount
   fiatValue?: CurrencyAmount | null
   priceImpact?: Percent
+  isFallbackFiatValue?: boolean
 }
 
 export default function CurrencyInputPanel({
@@ -132,7 +134,8 @@ export default function CurrencyInputPanel({
   customBalanceText,
   balance,
   fiatValue,
-  priceImpact
+  priceImpact,
+  isFallbackFiatValue,
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
 
@@ -157,7 +160,7 @@ export default function CurrencyInputPanel({
   return (
     <InputPanel id={id}>
       <Container focused={focused}>
-        <Content>
+        <div>
           {!hideInput && label && (
             <LabelRow>
               <RowBetween>
@@ -169,18 +172,17 @@ export default function CurrencyInputPanel({
           )}
           <InputRow style={hideInput ? { padding: '0', borderRadius: '8px' } : {}} selected={disableCurrencySelect}>
             {!hideInput && (
-              <>
-                <NumericalInput
-                  className="token-amount-input"
-                  value={value}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
-                  onUserInput={val => {
-                    onUserInput(val)
-                  }}
-                  disabled={disabled}
-                />
-              </>
+              <NumericalInput
+                className="token-amount-input"
+                value={value}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onUserInput={val => {
+                  onUserInput(val)
+                }}
+                disabled={disabled}
+                data-testid="transaction-value-input"
+              />
             )}
             <CurrencySelect
               selected={!!(currency || pair)}
@@ -208,16 +210,22 @@ export default function CurrencyInputPanel({
                       ? currency.symbol.slice(0, 4) +
                         '...' +
                         currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)
-                      : currency?.symbol) || t('select Token')}
+                      : currency?.symbol) || <div data-testid="select-token-button"> {t('select Token')}</div>}
                   </StyledTokenName>
                 )}
                 {!disableCurrencySelect && (pair || currency) && <StyledDropDown selected={!!currency} />}
               </Aligner>
             </CurrencySelect>
           </InputRow>
-          <FiatRow>
+          <div>
             <RowBetween>
-              {fiatValue && <FiatValueDetails fiatValue={fiatValue?.toFixed(2)} priceImpact={priceImpact} />}
+              {fiatValue && (
+                <FiatValueDetails
+                  fiatValue={fiatValue?.toFixed(2, { groupSeparator: ',' })}
+                  priceImpact={priceImpact}
+                  isFallback={isFallbackFiatValue}
+                />
+              )}
               {account && (
                 <TYPE.body
                   onClick={onMax}
@@ -229,7 +237,7 @@ export default function CurrencyInputPanel({
                     display: 'inline',
                     marginLeft: 'auto',
                     cursor:
-                      !hideBalance && !!(currency || pair) && (balance || selectedCurrencyBalance) ? 'pointer' : 'auto'
+                      !hideBalance && !!(currency || pair) && (balance || selectedCurrencyBalance) ? 'pointer' : 'auto',
                   }}
                 >
                   <UppercaseHelper>
@@ -237,7 +245,7 @@ export default function CurrencyInputPanel({
                       <>
                         {customBalanceText ?? t('balance')}
                         <TYPE.small as="span" fontWeight="600" color="text3" style={{ textDecoration: 'underline' }}>
-                          {(balance || selectedCurrencyBalance)?.toSignificant(6)}
+                          {limitNumberOfDecimalPlaces(balance || selectedCurrencyBalance) || '0'}
                         </TYPE.small>
                       </>
                     )}
@@ -245,8 +253,8 @@ export default function CurrencyInputPanel({
                 </TYPE.body>
               )}
             </RowBetween>
-          </FiatRow>
-        </Content>
+          </div>
+        </div>
       </Container>
       {!disableCurrencySelect && onCurrencySelect && (
         <CurrencySearchModal

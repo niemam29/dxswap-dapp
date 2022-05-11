@@ -13,10 +13,11 @@ import { AccountStatus } from './AccountStatus'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import NetworkSwitcherPopover from '../NetworkSwitcherPopover'
 import {
+  useCloseModals,
   useModalOpen,
   useNetworkSwitcherPopoverToggle,
   useOpenModal,
-  useWalletSwitcherPopoverToggle
+  useWalletSwitcherPopoverToggle,
 } from '../../state/application/hooks'
 import { TriangleIcon } from '../Icons'
 import { useTranslation } from 'react-i18next'
@@ -70,7 +71,7 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 
 export enum ModalView {
   Pending,
-  Account
+  Account,
 }
 
 export default function Web3Status() {
@@ -122,6 +123,7 @@ export default function Web3Status() {
   const mobileByMedia = useIsMobileByMedia()
   const [isUnsupportedNetwork, setUnsupportedNetwork] = useState(false)
   const isUnsupportedNetworkModal = useModalOpen(ApplicationModal.UNSUPPORTED_NETWORK)
+  const closeModals = useCloseModals()
 
   const unsupportedChainIdError = useUnsupportedChainIdError()
 
@@ -131,8 +133,16 @@ export default function Web3Status() {
       openUnsupportedNetworkModal()
     } else if (!isUnsupportedNetworkModal && isUnsupportedNetwork && !unsupportedChainIdError) {
       setUnsupportedNetwork(false)
+    } else if (isUnsupportedNetworkModal && !unsupportedChainIdError) {
+      closeModals()
     }
-  }, [isUnsupportedNetwork, openUnsupportedNetworkModal, isUnsupportedNetworkModal, unsupportedChainIdError])
+  }, [
+    isUnsupportedNetwork,
+    openUnsupportedNetworkModal,
+    isUnsupportedNetworkModal,
+    unsupportedChainIdError,
+    closeModals,
+  ])
 
   const clickHandler = useCallback(() => {
     toggleNetworkSwitcherPopover()

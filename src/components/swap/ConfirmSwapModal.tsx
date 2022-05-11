@@ -1,8 +1,8 @@
-import { currencyEquals, RoutablePlatform, Trade } from '@swapr/sdk'
+import { currencyEquals, Trade, UniswapV2RoutablePlatform } from '@swapr/sdk'
 import React, { useCallback, useMemo } from 'react'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
-  TransactionErrorContent
+  TransactionErrorContent,
 } from '../TransactionConfirmationModal'
 import SwapModalFooter from './SwapModalFooter'
 import SwapModalHeader from './SwapModalHeader'
@@ -33,7 +33,7 @@ export default function ConfirmSwapModal({
   swapErrorMessage,
   isOpen,
   attemptingTxn,
-  txHash
+  txHash,
 }: {
   isOpen: boolean
   trade: Trade | undefined
@@ -80,7 +80,7 @@ export default function ConfirmSwapModal({
   const pendingText = `Swapping ${trade?.inputAmount?.toSignificant(6)} ${
     trade?.inputAmount?.currency?.symbol
   } for ${trade?.outputAmount?.toSignificant(6)} ${trade?.outputAmount?.currency?.symbol} ${
-    trade?.platform.name !== RoutablePlatform.SWAPR.name ? `on ${trade?.platform.name}` : ''
+    trade?.platform.name !== UniswapV2RoutablePlatform.SWAPR.name ? `on ${trade?.platform.name}` : ''
   }`
 
   const confirmationContent = useCallback(
