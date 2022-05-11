@@ -13,6 +13,7 @@ jobs:
     container: cypress/browsers:node12.13.0-chrome78-ff70
     env:
       NODE_ENV: false
+      CYPRESS_CACHE_FOLDER: cypress/cache
     strategy:
       matrix:
         node_version: [16]
