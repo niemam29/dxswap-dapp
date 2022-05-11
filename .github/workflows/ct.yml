@@ -24,12 +24,12 @@ jobs:
           node-version: '16'
       - name: Install
         run: yarn install
+        with:
+          CYPRESS_CACHE_FOLDER=: /tmp/Cypress
       - name: Lint
         run: yarn lint
       - name: Check types
         run: yarn tsc --noEmit
-      - name: Install cypress
-        run: yarn cypress install
       - name: Run synpress tests
         run: yarn synpress:ct
         continue-on-error: true
