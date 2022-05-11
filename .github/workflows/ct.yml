@@ -25,7 +25,7 @@ jobs:
       - name: Install
         run: yarn install
         env:
-          CYPRESS_CACHE_FOLDER=: /tmp/Cypress
+          CYPRESS_CACHE_FOLDER=: /github/home/.cache/Cypress
       - name: Lint
         run: yarn lint
       - name: Check types
