@@ -22,10 +22,14 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
+      - name: Cache Cypress Binary
+        id: cache-cypress-binary
+        uses: actions/cache@v2
+        with:
+          path: cypress/cache
+          key: cypress-binary-${{ hashFiles('package-lock.json') }}
       - name: Install
         run: yarn install
-        env:
-          CYPRESS_CACHE_FOLDER=: /github/home/.cache/Cypress
       - name: Lint
         run: yarn lint
       - name: Check types
