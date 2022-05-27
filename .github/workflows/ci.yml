@@ -308,6 +308,8 @@ jobs:
             SwapBoxTests
             TokenMenuTests
             TransactionSettingsTests
+            transactionfull
+            transactionless
 
   cleanup:
     name: 🧹 Cleanup
