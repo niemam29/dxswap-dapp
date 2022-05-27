@@ -1,6 +1,9 @@
 name: CI
 
 on:
+  push:
+    branches:
+      - develop
   pull_request:
     types: [opened, synchronize, reopened]
   schedule:
@@ -29,6 +32,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --cache-folder $(yarn cache dir)
+
+      - name: Generate open-api
+        run: yarn codegen:socket
 
       - name: Compress workspace artifact
         run: tar --create --use-compress-program='zstd -T0' --file=/tmp/workspace.tar.zst .
@@ -60,6 +66,7 @@ jobs:
 
       - name: Run linter
         run: yarn lint --quiet
+
   test:
     name: 🔎 ・Test
     needs: install
@@ -80,6 +87,7 @@ jobs:
 
       - name: Run tests
         run: yarn test
+
   typecheck:
     name: ⬡・Typecheck
     needs: install
@@ -100,6 +108,7 @@ jobs:
 
       - name: Run typescript check
         run: yarn typecheck
+
   build:
     name: ⚙️ ・Build
     needs: install
@@ -130,6 +139,7 @@ jobs:
           name: build
           path: /tmp/build.tar.zst
           retention-days: 3
+
   deploy:
     name: ⬡・IPFS Deploy
     needs: build
@@ -202,6 +212,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --cache-folder $(yarn cache dir)
+
+      - name: Generate open-api
+        run: yarn codegen:socket
 
       - name: Install cypress
         run: yarn add -D cypress@9.2.0 --cache-folder $(yarn cache dir) && yarn cypress install && yarn cypress verify
