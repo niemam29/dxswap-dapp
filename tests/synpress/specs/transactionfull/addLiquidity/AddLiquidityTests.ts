@@ -1,6 +1,6 @@
-import { MenuBar } from '../../../pages/MenuBar'
-import { SwapPage } from '../../../pages/SwapPage'
-import { LiquidityPage } from '../../../pages/LiquidityPage'
+import { MenuBar } from '../../../../pages/MenuBar'
+import { SwapPage } from '../../../../pages/SwapPage'
+import { LiquidityPage } from '../../../../pages/LiquidityPage'
 
 describe('Add liquidity', () => {
   const TRANSACTION_VALUE: number = 0.000001

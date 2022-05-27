@@ -1,6 +1,6 @@
 import { SwapPage } from './SwapPage'
 export class TokenMenu {
-  static chooseToken(token: string) {
+  static chooseToken(token: string): SwapPage {
     this.getSingleTokenManagerInput()
       .should('be.visible')
       .type(token)

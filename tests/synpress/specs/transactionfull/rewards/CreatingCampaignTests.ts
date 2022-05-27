@@ -1,15 +1,15 @@
-import { MenuBar } from '../../../pages/MenuBar'
-import { RewardsPage } from '../../../pages/RewardsPage'
-import { CreatePoolPage } from '../../../pages/CreatePoolPage'
-import { PairMenu } from '../../../pages/PairMenu'
-import { TokenMenu } from '../../../pages/TokenMenu'
-import { DateUtils } from '../../../utils/DateUtils'
-import { SubgraphFacade } from '../../../utils/facades/SubgraphFacade'
-import { AddressesEnum } from '../../../utils/enums/AddressesEnum'
+import { MenuBar } from '../../../../pages/MenuBar'
+import { RewardsPage } from '../../../../pages/RewardsPage'
+import { CreatePoolPage } from '../../../../pages/CreatePoolPage'
+import { PairMenu } from '../../../../pages/PairMenu'
+import { TokenMenu } from '../../../../pages/TokenMenu'
+import { DateUtils } from '../../../../utils/DateUtils'
+import { SubgraphFacade } from '../../../../utils/facades/SubgraphFacade'
+import { AddressesEnum } from '../../../../utils/enums/AddressesEnum'
 import { getUnixTime } from 'date-fns'
-import { LiquidityPage } from '../../../pages/LiquidityPage'
-import { CampaignPage } from '../../../pages/CampaignPage'
-import { LiquidityCampaign } from '../../../utils/TestTypes'
+import { LiquidityPage } from '../../../../pages/LiquidityPage'
+import { CampaignPage } from '../../../../pages/CampaignPage'
+import { LiquidityCampaign } from '../../../../utils/TestTypes'
 
 describe('Campaign creation tests', () => {
   const REWARDS_INPUT = 0.001
@@ -67,8 +67,7 @@ describe('Campaign creation tests', () => {
       expect(token1.symbol).to.be.eq('USDT')
     })
   })
-  //TODO remove skip after bug #979 is fixed
-  it.skip('Should open a campaign through Rewards page [TC-60]', () => {
+  it('Should open a campaign through Rewards page [TC-60]', () => {
     RewardsPage.getRewardCards().should('be.visible')
     RewardsPage.getAllPairsButton().click()
     PairMenu.choosePair(TOKENS_PAIR)

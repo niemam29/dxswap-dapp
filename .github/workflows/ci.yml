@@ -143,59 +143,17 @@ jobs:
           path: /tmp/build.tar.zst
           retention-days: 3
 
-  deploy:
-    name: ⬡・IPFS Deploy
-    needs: build
-    runs-on: ubuntu-20.04
-    if: ${{ github.event_name != 'schedule' }}
-    steps:
-      - name: Inject slug variables
-        uses: rlespinasse/github-slug-action@3.5.1
-
-      - name: 📥 ・Download workspace artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-
-      - name: Extract workspace artifact
-        run: tar --extract --use-compress-program='zstd -d' --file=build.tar.zst
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Start Deployment
-        uses: bobheadxi/deployments@v0.6.0
-        id: deployment
-        with:
-          step: start
-          token: ${{secrets.GITHUB_TOKEN}}
-          env: ${{env.GITHUB_HEAD_REF_SLUG_URL || env.GITHUB_REF_SLUG_URL}}
-          ref: ${{github.head_ref}}
-
-      - name: Deploy to IPFS
-        uses: web3-storage/add-to-web3@v1
-        id: web3
-        with:
-          web3_token: ${{secrets.WEB3_STORAGE_TOKEN}}
-          path_to_add: 'build'
-
-      - name: Update Deployment Status
-        uses: bobheadxi/deployments@v0.6.0
-        if: always()
-        with:
-          step: finish
-          token: ${{secrets.GITHUB_TOKEN}}
-          status: ${{job.status}}
-          deployment_id: ${{steps.deployment.outputs.deployment_id}}
-          env_url: 'https://${{steps.web3.outputs.cid}}.ipfs.dweb.link'
-
   synpress:
     name: 👘 ・Synpress
     runs-on: ubuntu-20.04
     container: cypress/browsers:node12.13.0-chrome78-ff70
     env:
-      NODE_ENV: false
+      TEST_PARAMS: "-s 'tests/synpress/specs/${{ matrix.containers }}/*/*.ts'"
+    strategy:
+      fail-fast: false
+      matrix:
+        containers:
+          [transactionfull, transactionless]
     steps:
       - name: ⬇️ ・Checkout repo
         uses: actions/checkout@v3
@@ -227,17 +185,15 @@ jobs:
         continue-on-error: true
 
       - name: Merge test results into one
-        run: npm run report:merge
-
-      - name: Generate HTML report
-        run: yarn run report:generate
+        run: |
+          yarn run report:merge
+          mv index.json ${{ matrix.containers }}.json
 
       - name: Save code coverage results
         uses: actions/upload-artifact@v3
         with:
-          name: synpress-coverage-report
-          path: public-report/*
-          retention-days: 3
+          name: ${{ matrix.containers }}
+          path: ${{ matrix.containers }}.json
 
   cypress:
     name: 🎡 ・Cypress (${{ matrix.containers }})
@@ -278,7 +234,7 @@ jobs:
 
   cypress-report:
     name: ⬡・Merge and generate cypress reports
-    needs: [install, cypress]
+    needs: [install, cypress, synpress]
     runs-on: ubuntu-20.04
     steps:
       - name: 📥 ・Download workspace artifact
@@ -312,6 +268,14 @@ jobs:
         with:
           name: TransactionSettingsTests
           path: mochawesome-report
+      - uses: actions/download-artifact@v3
+        with:
+          name: transactionless
+          path: mochawesome-report
+      - uses: actions/download-artifact@v3
+        with:
+          name: transactionfull
+          path: mochawesome-report
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -344,6 +308,8 @@ jobs:
             SwapBoxTests
             TokenMenuTests
             TransactionSettingsTests
+            transactionfull
+            transactionless
 
   cleanup:
     name: 🧹 Cleanup
