@@ -181,7 +181,7 @@ jobs:
         run: yarn add -D cypress@9.2.0 --cache-folder $(yarn cache dir) && yarn cypress install && yarn cypress verify
 
       - name: Run synpress tests
-        run: yarn synpress:ct -s 'tests/synpress/specs/${{ matrix.containers }}/*'
+        run: yarn synpress:ct -s 'tests/synpress/specs/${{ matrix.containers }}/*''
         continue-on-error: true
 
       - name: Merge test results into one
